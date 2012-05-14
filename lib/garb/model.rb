@@ -58,7 +58,7 @@ module Garb
       end
       limit ? results[0...limit] : results
     end
-    
+
     private
     def send_request_for_data(profile, params)
       request = Request::Data.new(profile.session, URL, params)
