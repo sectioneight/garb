@@ -1,25 +1,26 @@
 module Garb
   class ClientError < StandardError
     attr_reader :code, :message, :errors
-    
+
     def initialize(message, code = nil, errors = [])
       @code, @message, @errors = code, message, errors
     end
-    
+
     def to_s
       "[#{code || 0}] #{message}"
+      code ? "[#{code}] #{message}" : message
     end
   end
   class BadRequestError < ClientError; end
   class InvalidCredentialsError < ClientError; end
   class InsufficientPermissionsError < ClientError; end
   class BackendError < ClientError; end
-  
+
   module Request
     class Data
       def initialize(session, base_url, parameters = {})
         parameters.merge!('key' => Garb.api_key) unless Garb.api_key.nil?
-        
+
         @session = session
         @base_url = base_url
         @parameters = parameters
@@ -39,10 +40,10 @@ module Garb
       end
 
       def send_request
-        if defined?(Rails) and Rails.env == 'development'
+        if defined?(Rails)
           Rails.logger.try :debug, "Garb::Request -> #{uri.path}#{query_string}"
         end
-        
+
         response = if @session.single_user?
           single_user_request
         elsif @session.oauth_user?
