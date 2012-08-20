@@ -55,7 +55,7 @@ module Garb
           ? results.concat(rs.to_a)
           : results = rs
         options[:offset] = results.size + 1
-        
+
         break if limit and results.size >= limit
         break if results.size >= results.total_results
       end
