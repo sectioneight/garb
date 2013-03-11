@@ -81,8 +81,7 @@ module Garb
       if options.has_key?(:segment_id)
         segment = "gaid::#{options[:segment_id].to_i}"
       elsif options.has_key?(:dynamic_segment)
-        filters = FilterParameters.new
-        filters.parameters << options[:dynamic_segment]
+        filters = FilterParameters.new(options[:dynamic_segment])
         segment = "dynamic::#{filters.to_params['filters']}"
       end
       {'segment' => segment}
